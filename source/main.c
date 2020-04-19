@@ -12,45 +12,43 @@
 #include "simAVRHeader.h"
 #endif
 
-enum State {Start, ONE, TWO, BETWEEN_ONE_TWO, BETWEEN_TWO_ONE} state;
+enum State {Start, INIT, INCREMENT, DECREMENT, ZERO} state;
 unsigned char tmpA = 0x00;
-unsigned char tmpB = 0x00;
+unsigned char tmpC = 0x00;
 
 void Tick() {
 	switch(state) {
 		case Start:
-			state = ONE;
+			tmpC = 0x07;
+			state = INIT;
 			break;
-		case ONE:
-			if (tmpA == 0x00) {
-				state = BETWEEN_ONE_TWO;
+		case INIT:
+			if (tmpA == 0x01) {
+				state = INCREMENT;
 			}
-			else {
-				state = ONE;
+			if (tmpA == 0x02) {
+				state = DECREMENT;
 			}	
 			break;
-		case BETWEEN_ONE_TWO:	
-			if (tmpA == 0x01) {
-				state = TWO;
-			}
-			else {
-				state = BETWEEN_ONE_TWO;
-			}
-			break;
-		case TWO:
+		case INCREMENT:	
 			if (tmpA == 0x00) {
-				state = BETWEEN_TWO_ONE;
+				state = INIT;
 			}
-			else {
-				state = TWO;
+			if (tmpA == 0x03) {
+				state = ZERO;
 			}
 			break;
-		case BETWEEN_TWO_ONE:
-			if (tmpA == 0x01) {
-				state = ONE;
+		case ZERO:
+			if (tmpA == 0x00) {
+				state = INIT;
 			}
-			else {
-				state = BETWEEN_TWO_ONE;
+			break;
+		case DECREMENT:
+			if (tmpA == 0x00) {
+				state = INIT;
+			}
+			if (tmpA == 0x03) {
+				state = ZERO;
 			}
 			break;
 		default:
@@ -59,17 +57,20 @@ void Tick() {
 	switch(state) {
 		case Start:
 			break;
-		case ONE:
-			tmpB = 0x01;
+		case INIT:
 			break;
-		case TWO:
-			tmpB = 0x02;
+		case INCREMENT:
+			if (tmpC < 0x09) {
+				tmpC++;
+			}
 			break;
-		case BETWEEN_ONE_TWO:
-			tmpB = 0x01;
+		case DECREMENT:
+			if (tmpC > 0x00) {
+				tmpC--;
+			}
 			break;
-		case BETWEEN_TWO_ONE:
-			tmpB = 0x02;
+		case ZERO:
+			tmpC = 0x00;
 			break;
 		default:
 			break;
@@ -79,11 +80,11 @@ void Tick() {
 
 int main(void) {
 	DDRA = 0x00; PORTA = 0x00;
-	DDRB = 0xFF; PORTB = 0x00;   
+	DDRC = 0xFF; PORTC = 0x00;   
     while (1) {
 		tmpA = PINA;
 		Tick();
-  		PORTB = tmpB;
+  		PORTC = tmpC;
     }
     return 1;
 }

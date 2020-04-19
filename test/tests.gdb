@@ -26,57 +26,20 @@
 echo ======================================================\n
 echo Running all tests..."\n\n
 
-# Test sequence from Start: A0 => PORTB: 0x02
-test "PINA: 0x01 => PORTB: 0x02, state: TWO"
+# Test sequence from Start: N/A => PORTC: 0x07
+test "PINA: N/A => PORTC: 0x07"
 set state = Start
 continue 2
-setPINA 0x01
-continue 2
-expectPORTB 0x02
+expectPORTC 0x07
 checkResult
 
-# Test sequence from Start: A0, !A0 => PORTB: 0x02
-test "PINA: 0x01, 0x00 => PORTB: 0x02, state: TWO"
-set state = Start
-setPINA 0x00
+# Test sequence from Start: N/A => PORTC: 0x06
+test "PINA: A1 => PORTC: 0x06"
+setPINA 0x02
 continue 2
-setPINA 0x01
-continue 2
-setPINA 0x00
-continue 2
-expectPORTB 0x02
+expectPORTC 0x06
 checkResult
 
-
-# Test sequence from Start: A0, !A0, A0 => PORTB: 0x02
-test "PINA: 0x01, 0x00 => PORTB: 0x02, state: TWO"
-set state = Start
-setPINA 0x00
-continue 2
-setPINA 0x01
-continue 2
-setPINA 0x00
-continue 2
-setPINA 0x01
-continue 2
-expectPORTB 0x01
-checkResult
-
-# Test sequence from Start: A0, !A0, A0, A0! => PORTB: 0x02
-test "PINA: 0x01, 0x00 => PORTB: 0x02, state: TWO"
-set state = Start
-setPINA 0x00
-continue 2
-setPINA 0x01
-continue 2
-setPINA 0x00
-continue 2
-setPINA 0x01
-continue 2
-setPINA 0x00
-continue 2
-expectPORTB 0x01
-checkResult
 
 # Report on how many tests passed/tests ran
 set $passed=$tests-$failed
