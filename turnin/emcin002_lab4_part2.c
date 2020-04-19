@@ -24,9 +24,15 @@ void Tick() {
 			break;
 		case INIT:
 			if (tmpA == 0x01) {
+				if (tmpC < 0x09) {
+					tmpC++;
+				}
 				state = INCREMENT;
 			}
 			if (tmpA == 0x02) {
+				if (tmpC > 0x00) {
+					tmpC--;
+				}
 				state = DECREMENT;
 			}	
 			if (tmpA == 0x03) {
@@ -63,14 +69,8 @@ void Tick() {
 		case INIT:
 			break;
 		case INCREMENT:
-			if (tmpC < 0x09) {
-				tmpC++;
-			}
 			break;
 		case DECREMENT:
-			if (tmpC > 0x00) {
-				tmpC--;
-			}
 			break;
 		case ZERO:
 			tmpC = 0x00;

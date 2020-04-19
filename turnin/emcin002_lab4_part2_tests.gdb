@@ -33,13 +33,32 @@ continue 2
 expectPORTC 0x07
 checkResult
 
-# Test sequence from Start: N/A => PORTC: 0x06
-test "PINA: A1 => PORTC: 0x06"
+# Test sequence from Start: A1 => PORTC: 0x06
+test "PINA: 0x02 => PORTC: 0x06"
 setPINA 0x02
 continue 2
 expectPORTC 0x06
 checkResult
 
+# Test sequence from Start: A1, !A1 => PORTC: 0x06
+test "PINA: 0x02, 0x00 => PORTC: 0x06"
+setPINA 0x02
+continue 2
+setPINA 0x00
+continue 2
+expectPORTC 0x06
+checkResult
+
+# Test sequence from Start: A1, !A1, A0 => PORTC: 0x06
+test "PINA: 0x02, 0x00, 0x01 => PORTC: 0x06"
+setPINA 0x02
+continue 2
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 2
+expectPORTC 0x06
+checkResult
 
 # Report on how many tests passed/tests ran
 set $passed=$tests-$failed
