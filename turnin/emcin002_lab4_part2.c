@@ -29,6 +29,9 @@ void Tick() {
 			if (tmpA == 0x02) {
 				state = DECREMENT;
 			}	
+			if (tmpA == 0x03) {
+				state = ZERO;
+			}
 			break;
 		case INCREMENT:	
 			if (tmpA == 0x00) {
